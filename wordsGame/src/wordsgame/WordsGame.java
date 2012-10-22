@@ -6,7 +6,7 @@ package wordsgame;
 
 /**
  *
- * @author Uziel
+ * @author Uziel Garía López
  */
 public class WordsGame {
 
