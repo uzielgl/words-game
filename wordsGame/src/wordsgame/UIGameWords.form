@@ -149,12 +149,16 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtWord">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtWordActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnVerify">
           <Properties>
             <Property name="text" type="java.lang.String" value="Verificar"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="onClickBtnVerify"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVerifyActionPerformed"/>
           </Events>
         </Component>
