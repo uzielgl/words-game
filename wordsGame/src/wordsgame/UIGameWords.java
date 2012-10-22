@@ -260,7 +260,11 @@ public class UIGameWords extends javax.swing.JFrame {
         int status = verifyWord( txtWord.getText().trim() );
         if ( status == 1 ){
             //Actualizar el panel
-            lblStatus.setText( "Has encontrado una palabra" );
+            lblStatus.setText( "Has encontrado una palabra." );
+        }else if( status == -2 ){
+            lblStatus.setText( "Esta palabra ya la has encontrado previamente." );
+        }else if( status == -1 ){
+            lblStatus.setText( "Esta palabra no es una subPalabra válida." );
         }
         
 
