@@ -15,6 +15,11 @@ public class WordsGame {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("hola");
+         
+        UIGameWords game = new UIGameWords();
+        game.setVisible( true );
+        
+        
+        
     }
 }
