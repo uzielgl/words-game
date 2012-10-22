@@ -257,7 +257,12 @@ public class UIGameWords extends javax.swing.JFrame {
 
     private void btnVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerifyActionPerformed
         // TODO add your handling code here:
-        verifyWord( txtWord.getText().trim() );
+        int status = verifyWord( txtWord.getText().trim() );
+        if ( status == 1 ){
+            //Actualizar el panel
+            lblStatus.setText( "Has encontrado una palabra" );
+        }
+        
 
     }//GEN-LAST:event_btnVerifyActionPerformed
 
