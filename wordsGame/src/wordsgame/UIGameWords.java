@@ -77,12 +77,11 @@ public class UIGameWords extends javax.swing.JFrame {
     /* Fill the panel with all the subStrings
      */
     public void updPnlSubStrings(){ 
-        
         //System.out.println( keys[0] );
         //System.out.println( words.keySet().toArray() );
          //palabras = words.keySet().toArray( );
         javax.swing.JLabel[] lblWords = new javax.swing.JLabel[ keyWords.length ];
-        for( int x = 0; x < lblWords.length ; x++ ) lblWords[ x ] = new javax.swing.JLabel( keyWords[ x ] );
+        for( int x = 0; x < lblWords.length ; x++ ) lblWords[ x ] = new javax.swing.JLabel( keyWords[ x ].replaceAll( ".", "_ " ) );
         
         javax.swing.GroupLayout pnlSubStringsLayout = new javax.swing.GroupLayout(pnlSubStrings);
         pnlSubStrings.setLayout(pnlSubStringsLayout);
