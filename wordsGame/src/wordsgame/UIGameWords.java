@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.util.*;
 import javax.swing.GroupLayout;
+import javax.swing.JScrollPane;
 /**
  *
  * @author Uziel
@@ -24,6 +25,8 @@ public class UIGameWords extends javax.swing.JFrame {
      */
     public UIGameWords() {
         initComponents();
+        
+        //JScrollPane scrollpane = new JScrollPane(pnlSubStrings);
         setMode("initial");
     }
     
@@ -39,7 +42,11 @@ public class UIGameWords extends javax.swing.JFrame {
             javax.swing.GroupLayout pnlSubStringsLayout = new javax.swing.GroupLayout(pnlSubStrings);
             pnlSubStrings.setLayout(pnlSubStringsLayout);
             btnStart.setEnabled( true );
-            
+            txtWord.setVisible( false );
+            btnVerify.setVisible( false );
+            lblReloj.setVisible( false );
+            txtReloj.setVisible( false );
+             
         }else if( mode ==  "start" ){
             start();
             btnFinish.setEnabled( true );
@@ -47,13 +54,17 @@ public class UIGameWords extends javax.swing.JFrame {
             txtWord.setEnabled( true );
             btnVerify.setEnabled( true );
             
-            lblRandomWord.setText( cp.mixWord( word ) );
+            lblRandomWord.setText( cp.mixWord( word ).toUpperCase() );
             lblStatus.setText("Introduce una palabra y da click en Verificar.");
             lblStatus2.setText("Restan " + words.size() + " palabras. ");
             //Fill de pnlSubStrings
-            updPnlSubStrings();
+            updPnlSubStrings("");
             
-            
+            txtWord.setVisible( true );
+            btnVerify.setVisible( true );
+            lblReloj.setVisible( true );
+            txtReloj.setVisible( true );
+
             System.out.println( word ); //see the solutions =D 
             System.out.println( words );
         }
@@ -64,8 +75,14 @@ public class UIGameWords extends javax.swing.JFrame {
         words =  new HashMap<String,Boolean>();
         //Make the map o
         String[] subStrings = cp.getSubStrings( word );
-        for( int i = 0 ; i < subStrings.length ; i++ ) words.put(subStrings[i], false);
+        
+        for( int i = 0 ; i < subStrings.length ; i++ ) words.put( subStrings[ i ], false);
         keyWords = words.keySet().toArray( new String[ words.size() ] );
+        
+        List<String> list = Arrays.asList( keyWords );
+        Collections.sort( list,  new ComparadorPalabras() );
+        keyWords = list.toArray( new String[ keyWords.length ] );
+        
     }
     
     public void finish(){}
@@ -74,6 +91,7 @@ public class UIGameWords extends javax.swing.JFrame {
     /* Verifica si letter está en words
      */
     public int verifyWord( String letter ){
+        letter = letter.toLowerCase();
         if( words.containsKey( letter ) ){
             if( words.get( letter ) == true ) return -2; //La palabra ya la había encontrado
             else {
@@ -87,16 +105,19 @@ public class UIGameWords extends javax.swing.JFrame {
     
    
     /* Fill the panel with all the subStrings
+     * mode puede ser: showAnswer|""
      */
-    public void updPnlSubStrings(){ 
+    public void updPnlSubStrings( String mode  ){ 
         //System.out.println( keys[0] );
         //System.out.println( words.keySet().toArray() );
          //palabras = words.keySet().toArray( );
         javax.swing.JLabel[] lblWords = new javax.swing.JLabel[ keyWords.length ];
         for( int x = 0; x < lblWords.length ; x++ ){
             String to_show = "";
-            if( words.get( keyWords[ x ] ) ) to_show = keyWords[ x ];
+            if( words.get( keyWords[ x ] ) ) to_show = keyWords[ x ].toUpperCase();
+            else if( mode == "showAnswer"  ) to_show = keyWords[ x ].toUpperCase() + " x";
             else to_show = keyWords[ x ].replaceAll( ".", "_ " );
+            
                        
             lblWords[ x ] = new javax.swing.JLabel( to_show );
         }
@@ -125,8 +146,6 @@ public class UIGameWords extends javax.swing.JFrame {
            pnlSubStringsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
            .addGroup( labelsVertical )
         );
-        
-         
     }
     
 
@@ -151,6 +170,8 @@ public class UIGameWords extends javax.swing.JFrame {
         lblRandomWord = new javax.swing.JLabel();
         txtWord = new javax.swing.JTextField();
         btnVerify = new javax.swing.JButton();
+        lblReloj = new javax.swing.JLabel();
+        txtReloj = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("7 Words");
@@ -201,7 +222,7 @@ public class UIGameWords extends javax.swing.JFrame {
         );
         pnlSubStringsLayout.setVerticalGroup(
             pnlSubStringsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 573, Short.MAX_VALUE)
+            .addGap(0, 581, Short.MAX_VALUE)
         );
 
         lblRandomWord.setText("RANDOM WORD IN ALEATORY MODE");
@@ -240,7 +261,7 @@ public class UIGameWords extends javax.swing.JFrame {
                 .addComponent(txtWord, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVerify)
-                .addContainerGap(322, Short.MAX_VALUE))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,6 +274,13 @@ public class UIGameWords extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
+        lblReloj.setText("Tiempo restante:");
+
+        txtReloj.setEditable(false);
+        txtReloj.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        txtReloj.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtReloj.setText("00:00");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -262,7 +290,12 @@ public class UIGameWords extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtReloj)))
                     .addComponent(pnlSubStrings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -271,10 +304,15 @@ public class UIGameWords extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblReloj)
+                        .addGap(4, 4, 4)
+                        .addComponent(txtReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlSubStrings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -288,7 +326,9 @@ public class UIGameWords extends javax.swing.JFrame {
 
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
         // TODO add your handling code here:
-        setMode("initial");
+        updPnlSubStrings( "showAnswer" );
+        btnStart.setEnabled( true );
+        //setMode("initial");
     }//GEN-LAST:event_btnFinishActionPerformed
 
     public void actionVerifyWord(){
@@ -296,7 +336,7 @@ public class UIGameWords extends javax.swing.JFrame {
         int status = verifyWord( txtWord.getText().trim() );
         if ( status == 1 ){
             //Actualizar el panel
-            updPnlSubStrings();
+            updPnlSubStrings("");
             lblStatus.setText( "Has encontrado una palabra." );
         }else if( status == -2 ){
             lblStatus.setText( "Esta palabra ya la has encontrado previamente." );
@@ -376,9 +416,11 @@ public class UIGameWords extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblRandomWord;
+    private javax.swing.JLabel lblReloj;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblStatus2;
     private javax.swing.JPanel pnlSubStrings;
+    private javax.swing.JTextField txtReloj;
     private javax.swing.JTextField txtWord;
     // End of variables declaration//GEN-END:variables
 }

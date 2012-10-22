@@ -33,7 +33,6 @@ class ColeccionPalabras{
         
         def r = new Random()
         def ran = r.nextInt( keys.size() )
-        
         return keys[ ran ]
     }
     
