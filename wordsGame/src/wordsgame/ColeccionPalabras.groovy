@@ -34,8 +34,7 @@ class ColeccionPalabras{
         def r = new Random()
         def ran = r.nextInt( keys.size() )
         
-        return keys[ 0 ]
-        //return keys[ ran ]
+        return keys[ ran ]
     }
     
     public String[] getSubStrings( word ){
