@@ -35,7 +35,7 @@ public class UIGameWords extends javax.swing.JFrame {
             lblRandomWord.setText("");
             txtWord.setEnabled( false );
             btnVerify.setEnabled( false );
-            lblStatus.setText("Game of seven Words. Da click en \"Iniciar\" para empezar el juego.");    
+            lblStatus.setText("<html>Game of seven Words. Da click en \"Iniciar\" para empezar el  <b>juego</b>.</html>");    
             btnFinish.setEnabled( false );
             lblStatus2.setText("");
             pnlSubStrings.removeAll();
@@ -210,8 +210,10 @@ public class UIGameWords extends javax.swing.JFrame {
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
-        lblStatus.setText("<html>Game of seven Words. Da click en \"Iniciar\" para empezar el <strong>juego</strong>.</html>");
+        lblStatus.setText("<html>Game of seven Words. Da click en \"Iniciar\" para empezar el  <b>juego</b>.</html>"); // NOI18N
         jToolBar2.add(lblStatus);
+        lblStatus.getAccessibleContext().setAccessibleDescription("");
+
         jToolBar2.add(filler1);
 
         lblStatus2.setText("jLabel2");
@@ -276,6 +278,8 @@ public class UIGameWords extends javax.swing.JFrame {
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setPreferredSize(new java.awt.Dimension(100, 400));
 
+        pnlSubStrings.setToolTipText("");
+
         javax.swing.GroupLayout pnlSubStringsLayout = new javax.swing.GroupLayout(pnlSubStrings);
         pnlSubStrings.setLayout(pnlSubStringsLayout);
         pnlSubStringsLayout.setHorizontalGroup(
@@ -319,8 +323,8 @@ public class UIGameWords extends javax.swing.JFrame {
                         .addGap(4, 4, 4)
                         .addComponent(txtReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 

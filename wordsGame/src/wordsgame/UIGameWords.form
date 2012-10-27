@@ -56,8 +56,8 @@
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="189" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="583" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -107,8 +107,11 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblStatus">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Game of seven Words. Da click en &quot;Iniciar&quot; para empezar el &lt;strong&gt;juego&lt;/strong&gt;.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Game of seven Words. Da click en &quot;Iniciar&quot; para empezar el  &lt;b&gt;juego&lt;/b&gt;.&lt;/html&gt;" noResource="true"/>
           </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
+          </AccessibilityProperties>
         </Component>
         <Component class="javax.swing.Box$Filler" name="filler1">
           <Properties>
@@ -206,6 +209,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="pnlSubStrings">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
