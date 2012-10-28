@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package wordsgame;
+import java.awt.Color;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Comparator;
@@ -19,6 +20,7 @@ public class UIGameWords extends javax.swing.JFrame {
     private ColeccionPalabras cp = new ColeccionPalabras();
     private String word; //The random word of 7 letters
     private String[] keyWords;
+    private DiccionarioMerriamWebster dic = new DiccionarioMerriamWebster();
     
     /**
      * Creates new form UIGameWords
@@ -102,7 +104,23 @@ public class UIGameWords extends javax.swing.JFrame {
             return -1; // La palabra no es de las subpalabras
         
     }
+    public void manejador(java.awt.event.MouseEvent evt ){
+        javax.swing.JLabel lbl = (javax.swing.JLabel )evt.getComponent();
+        //obtenemos la palabra
+        String[] word = lbl.getText().split(" ");
+        
+        String word0 = word[0];
+        System.out.println(word);
+        System.out.println(word0);
+        lbl.setText( word0 + " " + dic.obtenerDefinicion( word0.toLowerCase() ) );
+    }
     
+    public String correctFormat(String cad){
+        return "<html><font color=green>" + cad + "</font></html>";
+    }
+    public String wrongFormat(String cad){
+        return "<html><font color=green>" + cad + "</font></html>";
+    }
    
     /* Fill the panel with all the subStrings
      * mode puede ser: showAnswer|""
@@ -113,13 +131,27 @@ public class UIGameWords extends javax.swing.JFrame {
          //palabras = words.keySet().toArray( );
         javax.swing.JLabel[] lblWords = new javax.swing.JLabel[ keyWords.length ];
         for( int x = 0; x < lblWords.length ; x++ ){
+            lblWords[ x ] = new javax.swing.JLabel();
+           
             String to_show = "";
-            if( words.get( keyWords[ x ] ) ) to_show = keyWords[ x ].toUpperCase();
-            else if( mode == "showAnswer"  ) to_show = keyWords[ x ].toUpperCase() + " x";
-            else to_show = keyWords[ x ].replaceAll( ".", "_ " );
+            if( words.get( keyWords[ x ] ) ){ 
+                to_show = keyWords[ x ].toUpperCase();
+                lblWords[x].setForeground( new Color(8,102,47) );
+            }else if( mode == "showAnswer"  ) {
+                to_show = keyWords[ x ].toUpperCase() + " x";
+                lblWords[x].setForeground( new Color(188,1,8) );
+            }else to_show = keyWords[ x ].replaceAll( ".", "_ " );
             
+            lblWords[ x ].setText( to_show );
                        
-            lblWords[ x ] = new javax.swing.JLabel( to_show );
+            
+            if( mode == "showAnswer" ){
+                lblWords[ x ].addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        manejador(evt);
+                    }
+                });
+            }
         }
         
         pnlSubStrings.removeAll();
@@ -220,6 +252,11 @@ public class UIGameWords extends javax.swing.JFrame {
         jToolBar2.add(lblStatus2);
 
         lblRandomWord.setText("RANDOM WORD IN ALEATORY MODE");
+        lblRandomWord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clickARandom(evt);
+            }
+        });
 
         txtWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -384,6 +421,10 @@ public class UIGameWords extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ( evt.getKeyCode() == 10 ) actionVerifyWord();
     }//GEN-LAST:event_txtWordKeyPressed
+
+    private void clickARandom(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickARandom
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clickARandom
 
     /**
      * @param args the command line arguments
