@@ -24,7 +24,7 @@ public class UIGameWords extends javax.swing.JFrame {
     private String[] keyWords;
     private DiccionarioMerriamWebster dic = new DiccionarioMerriamWebster();
     private Thread reloj = new Thread(new Reloj());
-    private int num = 180;
+    private int initialTime = 180;
     
     /**
      * Creates new form UIGameWords
@@ -52,6 +52,8 @@ public class UIGameWords extends javax.swing.JFrame {
             btnVerify.setVisible( false );
             lblReloj.setVisible( false );
             txtReloj.setVisible( false );
+            pnlSubStrings.setVisible(false);
+            jScrollPane1.setVisible( false );
              
         }else if( mode ==  "start" ){
             start();
@@ -70,6 +72,8 @@ public class UIGameWords extends javax.swing.JFrame {
             btnVerify.setVisible( true );
             lblReloj.setVisible( true );
             txtReloj.setVisible( true );
+            pnlSubStrings.setVisible(true);
+            jScrollPane1.setVisible( true );
 
             System.out.println( word ); //see the solutions =D 
             System.out.println( words );
@@ -91,7 +95,15 @@ public class UIGameWords extends javax.swing.JFrame {
         
     }
     
-    public void finish(){}
+    public void finish(){
+        updPnlSubStrings( "showAnswer" );
+        btnStart.setEnabled( true );
+        reloj.suspend();
+        lblStatus.setText("El juego ha finalizado, da click en cada palabra para ver su definición (Las verdes las encontraste, las rojas no).");
+        txtWord.setVisible(false);
+        btnVerify.setVisible(false);
+        btnFinish.setEnabled(false);
+    }
     
     
     /* Verifica si letter está en words
@@ -107,7 +119,6 @@ public class UIGameWords extends javax.swing.JFrame {
             } //Es una palabra que no había encontrado antes
         }else
             return -1; // La palabra no es de las subpalabras
-        
     }
     public void manejador(java.awt.event.MouseEvent evt ){
         javax.swing.JLabel lbl = (javax.swing.JLabel )evt.getComponent();
@@ -119,13 +130,7 @@ public class UIGameWords extends javax.swing.JFrame {
         System.out.println(word0);
         lbl.setText( word0 + " " + dic.obtenerDefinicion( word0.toLowerCase() ) );
     }
-    
-    public String correctFormat(String cad){
-        return "<html><font color=green>" + cad + "</font></html>";
-    }
-    public String wrongFormat(String cad){
-        return "<html><font color=green>" + cad + "</font></html>";
-    }
+
    
     /* Fill the panel with all the subStrings
      * mode puede ser: showAnswer|""
@@ -143,7 +148,7 @@ public class UIGameWords extends javax.swing.JFrame {
                 to_show = keyWords[ x ].toUpperCase();
                 lblWords[x].setForeground( new Color(8,102,47) );
             }else if( mode == "showAnswer"  ) {
-                to_show = keyWords[ x ].toUpperCase() + " x";
+                to_show = keyWords[ x ].toUpperCase();
                 lblWords[x].setForeground( new Color(188,1,8) );
             }else to_show = keyWords[ x ].replaceAll( ".", "_ " );
             
@@ -199,7 +204,6 @@ public class UIGameWords extends javax.swing.JFrame {
         btnStart = new javax.swing.JButton();
         btnFinish = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
-        lblStatus = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         lblStatus2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -210,6 +214,7 @@ public class UIGameWords extends javax.swing.JFrame {
         txtReloj = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlSubStrings = new javax.swing.JPanel();
+        lblStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("7 Words");
@@ -246,11 +251,6 @@ public class UIGameWords extends javax.swing.JFrame {
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
-
-        lblStatus.setText("<html>Game of seven Words. Da click en \"Iniciar\" para empezar el  <b>juego</b>.</html>"); // NOI18N
-        jToolBar2.add(lblStatus);
-        lblStatus.getAccessibleContext().setAccessibleDescription("");
-
         jToolBar2.add(filler1);
 
         lblStatus2.setText("jLabel2");
@@ -335,6 +335,8 @@ public class UIGameWords extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(pnlSubStrings);
 
+        lblStatus.setText("<html>Game of seven Words. Da click en \"Iniciar\" para empezar el  <b>juego</b>.</html>"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -345,7 +347,9 @@ public class UIGameWords extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblStatus))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -358,17 +362,22 @@ public class UIGameWords extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblReloj)
                         .addGap(4, 4, 4)
-                        .addComponent(txtReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        lblStatus.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -376,25 +385,41 @@ public class UIGameWords extends javax.swing.JFrame {
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         // TODO add your handling code here:
         setMode("start");
-        
-        num = 180;
+        reloj.resume();
+        initialTime = 180;
         reloj.start();
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
         // TODO add your handling code here:
-        updPnlSubStrings( "showAnswer" );
-        btnStart.setEnabled( true );
-        //setMode("initial");
+        finish();
     }//GEN-LAST:event_btnFinishActionPerformed
 
+    public boolean haveAllWords(){
+        boolean haveAllWords = true;
+        
+        Iterator it = words.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry)it.next();
+            if ( e.getValue() == false ){
+                return false;
+            }
+        }
+        
+        return haveAllWords;
+    }
+    
     public void actionVerifyWord(){
         // TODO add your handling code here:
         int status = verifyWord( txtWord.getText().trim() );
         if ( status == 1 ){
-            //Actualizar el panel
-            updPnlSubStrings("");
-            lblStatus.setText( "Has encontrado una palabra." );
+            if( haveAllWords() ){
+                finish();
+            }else{
+                //Actualizar el panel
+                updPnlSubStrings("");
+                lblStatus.setText( "Has encontrado una palabra." );
+            }
         }else if( status == -2 ){
             lblStatus.setText( "Esta palabra ya la has encontrado previamente." );
         }else if( status == -1 ){
@@ -471,59 +496,48 @@ public class UIGameWords extends javax.swing.JFrame {
     
     
     class Reloj implements Runnable {
-
         @Override
         public void run() {
-           //btIniciar.setEnabled(false);
-
-           while (num > 0) {
-               if (num < 30){
+           while (initialTime > 0) {
+               if (initialTime < 30){
                txtReloj.setBackground(Color.red);
-               //txtReloj.s
                }
                try {
                    Thread.sleep(1000);
                } catch (InterruptedException ex) {
                    Logger.getLogger(UIGameWords.class.getName()).log(Level.SEVERE, null, ex);
                }
-               num--;
-               if(num == 0){
-
-                   txtWord.setEnabled( false );
-                   btnVerify.setEnabled(false); 
-                   lblStatus.setText( "<html><p>SE TERMINÓ EL TIEMPO!!</p> "
-                           + " <p><p><p>da click en las palabras para saber su definición</p> </html>" );
-                   updPnlSubStrings( "showAnswer" );
-
-
+               initialTime--;
+               if(initialTime == 0){
+                   txtWord.setVisible( false );
+                   btnVerify.setVisible(false); 
+                   lblStatus.setText("El juego ha finalizado, da click en cada palabra para ver su definición (Las verdes las encontraste, las rojas no).");
                }
-               //System.out.println(".");
-               int min = num/60;
-               int seg = num%60;
-               String sMin = 0+Integer.toString(min);
+               int m = initialTime/60;
+               int s = initialTime%60;
+               String sMin = 0 + Integer.toString( m );
                String sSeg = "";
-               if(seg < 10){
-                   sSeg = 0+Integer.toString(seg);
+               if(s < 10){
+                   sSeg = 0 + Integer.toString( s );
                }else{
-                    sSeg = Integer.toString(seg);
+                    sSeg = Integer.toString( s );
                }
-               txtReloj.setText(sMin+":"+sSeg);
+               txtReloj.setText( sMin+":" + sSeg );
            }
-           //btIniciar.setEnabled(true);
         }
     }
          
-    public void incrementaReloj(int tamPal){
-        if (tamPal == 3){
-            num += 3;
-        }else if (tamPal == 4){
-            num += 5;
-        }else if (tamPal == 5){
-            num += 10;
-        }else if (tamPal == 6){
-            num += 20;
-        }else if (tamPal == 7){
-            num += 30;
+    public void incrementaReloj(int lenghtWord){
+        if (lenghtWord == 3){
+            initialTime += 3;
+        }else if (lenghtWord == 4){
+            initialTime += 5;
+        }else if (lenghtWord == 5){
+            initialTime += 10;
+        }else if (lenghtWord == 6){
+            initialTime += 20;
+        }else if (lenghtWord == 7){
+            initialTime += 30;
         }
     }
     
