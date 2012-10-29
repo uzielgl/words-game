@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.*;
 import javax.swing.GroupLayout;
 import javax.swing.JScrollPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Uziel
@@ -21,6 +23,8 @@ public class UIGameWords extends javax.swing.JFrame {
     private String word; //The random word of 7 letters
     private String[] keyWords;
     private DiccionarioMerriamWebster dic = new DiccionarioMerriamWebster();
+    private Thread reloj = new Thread(new Reloj());
+    private int num = 180;
     
     /**
      * Creates new form UIGameWords
@@ -97,6 +101,7 @@ public class UIGameWords extends javax.swing.JFrame {
         if( words.containsKey( letter ) ){
             if( words.get( letter ) == true ) return -2; //La palabra ya la había encontrado
             else {
+                incrementaReloj(txtWord.getText().trim().length());
                 words.put( letter, true);
                 return 1;
             } //Es una palabra que no había encontrado antes
@@ -371,6 +376,9 @@ public class UIGameWords extends javax.swing.JFrame {
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         // TODO add your handling code here:
         setMode("start");
+        
+        num = 180;
+        reloj.start();
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
@@ -460,6 +468,66 @@ public class UIGameWords extends javax.swing.JFrame {
             }
         });
     }
+    
+    
+    class Reloj implements Runnable {
+
+        @Override
+        public void run() {
+           //btIniciar.setEnabled(false);
+
+           while (num > 0) {
+               if (num < 30){
+               txtReloj.setBackground(Color.red);
+               //txtReloj.s
+               }
+               try {
+                   Thread.sleep(1000);
+               } catch (InterruptedException ex) {
+                   Logger.getLogger(UIGameWords.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               num--;
+               if(num == 0){
+
+                   txtWord.setEnabled( false );
+                   btnVerify.setEnabled(false); 
+                   lblStatus.setText( "<html><p>SE TERMINÓ EL TIEMPO!!</p> "
+                           + " <p><p><p>da click en las palabras para saber su definición</p> </html>" );
+                   updPnlSubStrings( "showAnswer" );
+
+
+               }
+               //System.out.println(".");
+               int min = num/60;
+               int seg = num%60;
+               String sMin = 0+Integer.toString(min);
+               String sSeg = "";
+               if(seg < 10){
+                   sSeg = 0+Integer.toString(seg);
+               }else{
+                    sSeg = Integer.toString(seg);
+               }
+               txtReloj.setText(sMin+":"+sSeg);
+           }
+           //btIniciar.setEnabled(true);
+        }
+    }
+         
+    public void incrementaReloj(int tamPal){
+        if (tamPal == 3){
+            num += 3;
+        }else if (tamPal == 4){
+            num += 5;
+        }else if (tamPal == 5){
+            num += 10;
+        }else if (tamPal == 6){
+            num += 20;
+        }else if (tamPal == 7){
+            num += 30;
+        }
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinish;
     private javax.swing.JButton btnStart;
@@ -478,3 +546,4 @@ public class UIGameWords extends javax.swing.JFrame {
     private javax.swing.JTextField txtWord;
     // End of variables declaration//GEN-END:variables
 }
+
